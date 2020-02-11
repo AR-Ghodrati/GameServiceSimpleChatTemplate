@@ -4,11 +4,13 @@ using FiroozehGameService.Core;
 using FiroozehGameService.Handlers;
 using FiroozehGameService.Models;
 using FiroozehGameService.Models.Command;
+using FiroozehGameService.Utils;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Utils;
+using LogType = FiroozehGameService.Utils.LogType;
 
 namespace Controllers
 {
@@ -36,7 +38,6 @@ namespace Controllers
         
         private void Start()
         {
-            DontDestroyOnLoad(this);
             if(GameService.IsAuthenticated()) return;
 
             SetEventHandlers();
@@ -57,10 +58,18 @@ namespace Controllers
             CoreEventHandlers.Error += Error;
             
             ChatEventHandlers.OnSubscribeChannel += OnSubscribeChannel;
+            LogUtil.LogEventHandler += LogEventHandler;
 
         }
 
-        
+        private void LogEventHandler(object sender, Log e)
+        {
+            if(Status != null) Status.text += e.Txt + "\r\n";
+            if(e.Type == LogType.Normal) Debug.Log(e.Txt);
+            else Debug.LogError(e.Txt);
+        }
+
+
         /// <summary>
         /// When Channel Subscribed , go To ChatScene
         /// </summary>

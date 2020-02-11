@@ -1,6 +1,7 @@
 ﻿using FiroozehGameService.Handlers;
 using FiroozehGameService.Models.GSLive.Chat;
 using UnityEngine;
+using UnityEngine.UI;
 using Utils;
 
 namespace Controllers
@@ -10,13 +11,22 @@ namespace Controllers
         public GameObject ContentPanel;
 
         public GameObject ListItemPrefab;
-        
+
+        public ScrollRect ScrollRect;
         
         // Start is called before the first frame update
         void Start()
         {
+            ScrollRect = GetComponent<ScrollRect>();
             SetEventHandlers();
-           
+        }
+        
+        private void MoveToEnd()
+        {
+            Canvas.ForceUpdateCanvases();
+            ScrollRect.content.GetComponent<VerticalLayoutGroup>().CalculateLayoutInputVertical();
+            ScrollRect.content.GetComponent<ContentSizeFitter>().SetLayoutVertical();
+            ScrollRect.verticalNormalizedPosition = 0;
         }
 
         private void SetEventHandlers()
@@ -47,6 +57,8 @@ namespace Controllers
             
             newChatItem.transform.parent = ContentPanel.transform;
             newChatItem.transform.localScale = Vector3.one;
+            
+            MoveToEnd();
         }
     }
 }
