@@ -58,18 +58,10 @@ namespace Controllers
             CoreEventHandlers.Error += Error;
             
             ChatEventHandlers.OnSubscribeChannel += OnSubscribeChannel;
-            LogUtil.LogEventHandler += LogEventHandler;
 
         }
 
-        private void LogEventHandler(object sender, Log e)
-        {
-            if(Status != null) Status.text += e.Txt + "\r\n";
-            if(e.Type == LogType.Normal) Debug.Log(e.Txt);
-            else Debug.LogError(e.Txt);
-        }
-
-
+       
         /// <summary>
         /// When Channel Subscribed , go To ChatScene
         /// </summary>
