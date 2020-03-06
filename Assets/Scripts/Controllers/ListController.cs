@@ -38,6 +38,7 @@ namespace Controllers
         
         private void OnUnSubscribeChannel(object sender, string channelName)
         {
+            MenuController.ChannelNameSubscribed = null;
         }
 
        

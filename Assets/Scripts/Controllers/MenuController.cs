@@ -3,14 +3,11 @@ using System.Threading.Tasks;
 using FiroozehGameService.Core;
 using FiroozehGameService.Handlers;
 using FiroozehGameService.Models;
-using FiroozehGameService.Models.Command;
-using FiroozehGameService.Utils;
-using Newtonsoft.Json;
+using FiroozehGameService.Models.GSLive.Command;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Utils;
-using LogType = FiroozehGameService.Utils.LogType;
 
 namespace Controllers
 {
@@ -56,7 +53,7 @@ namespace Controllers
         {
             CoreEventHandlers.SuccessfullyLogined += SuccessfullyLogined;
             CoreEventHandlers.Error += Error;
-            
+
             ChatEventHandlers.OnSubscribeChannel += OnSubscribeChannel;
 
         }
@@ -78,7 +75,7 @@ namespace Controllers
         /// </summary>
         private async Task SubscribeChannel(string channelName)
         {
-           await GameService.GSLive.Chat.SubscribeChannel(channelName);
+            await GameService.GSLive.Chat.SubscribeChannel(channelName);
         }
 
         private void Error(object sender, ErrorEvent e)
@@ -99,7 +96,10 @@ namespace Controllers
             ChannelName.gameObject.SetActive(true);
             StartGameBtn.interactable = true;
             
-            StartGameBtn.onClick.AddListener(async () => { await SubscribeChannel(ChannelName.text.Trim());});
+            StartGameBtn.onClick.AddListener(async () =>
+            {
+                await SubscribeChannel(ChannelName.text.Trim());
+            });
 
             
             Status.text = "Status : Connected!";
