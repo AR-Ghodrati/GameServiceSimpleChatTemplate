@@ -100,7 +100,7 @@ namespace Controllers
             {
                 await SubscribeChannel(ChannelName.text.Trim());
             });
-
+            
             
             Status.text = "Status : Connected!";
             Debug.Log("SuccessfullyLogined!");
