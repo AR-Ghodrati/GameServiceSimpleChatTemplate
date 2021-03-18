@@ -4,6 +4,7 @@ using FiroozehGameService.Core;
 using FiroozehGameService.Handlers;
 using FiroozehGameService.Models;
 using FiroozehGameService.Models.GSLive.Command;
+using FiroozehGameService.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -47,6 +48,11 @@ namespace Controllers
             GameService.Logout();
             Application.Quit();
         }
+        
+        public void OnApplicationPause(bool paused) {
+            Debug.LogError("OnApplicationPause : " + 
+                           GameService.GSLive.IsCommandAvailable());
+        }
 
 
         private void SetEventHandlers()
@@ -55,10 +61,9 @@ namespace Controllers
             CoreEventHandlers.Error += Error;
 
             ChatEventHandlers.OnSubscribeChannel += OnSubscribeChannel;
-
         }
+        
 
-       
         /// <summary>
         /// When Channel Subscribed , go To ChatScene
         /// </summary>
@@ -75,7 +80,7 @@ namespace Controllers
         /// </summary>
         private async Task SubscribeChannel(string channelName)
         {
-            await GameService.GSLive.Chat.SubscribeChannel(channelName);
+            await GameService.GSLive.Chat().SubscribeChannel(channelName);
         }
 
         private void Error(object sender, ErrorEvent e)
@@ -151,7 +156,7 @@ namespace Controllers
                             LoginErr.text = "Invalid Input!";
                         else
                         {
-                            var userToken = await GameService.SignUp(nickName, email, pass);
+                            var userToken = await GameService.LoginOrSignUp.SignUp(nickName, email, pass);
                             FileUtil.SaveUserToken(userToken);
                         }
 
@@ -165,13 +170,14 @@ namespace Controllers
                             LoginErr.text = "Invalid Input!";
                         else
                         {
-                            var userToken = await GameService.Login(email, pass);
+                            var userToken = await GameService.LoginOrSignUp.Login(email, pass);
                             FileUtil.SaveUserToken(userToken);
                         }
                     }
                 }
                 catch (Exception e)
                 {
+                    Debug.LogError(e);
                     if (e is GameServiceException) LoginErr.text = "GameServiceException : " + e.Message;
                     else LoginErr.text = "InternalException2 : " + e.Message;
                 }

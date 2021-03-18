@@ -16,7 +16,7 @@ namespace Controllers
             {
                 if (!GameService.IsAuthenticated()) return;
                 var message = MessageToSend.text.Trim();
-                await GameService.GSLive.Chat.SendChannelMessage(MenuController.ChannelNameSubscribed, message);
+                await GameService.GSLive.Chat().SendChannelMessage(MenuController.ChannelNameSubscribed, message);
 
                 MessageToSend.text = null;
             });
